@@ -10,17 +10,6 @@ const Contact = () => {
     fetchContacts();
   }, []);
 
-  const handleDelete = async (id) => {
-    try {
-      await fetch(`https://playground.4geeks.com/apis/fake/contact/${id}`, {
-        method: "DELETE"
-      });
-      dispatch({ type: "DELETE_CONTACT", payload: id });
-    } catch (error) {
-      console.error("Error al eliminar contacto:", error);
-    }
-  };
-
   const fetchContacts = async () => {
     try {
       const res = await fetch("https://playground.4geeks.com/apis/fake/contact/agenda/marina");
@@ -36,6 +25,22 @@ const Contact = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const res = await fetch(`https://playground.4geeks.com/apis/fake/contact/${id}`, {
+        method: "DELETE"
+      });
+
+      if (res.ok) {
+        fetchContacts();
+      } else {
+        console.error("La API no eliminó el contacto correctamente");
+      }
+    } catch (error) {
+      console.error("Error al eliminar contacto:", error);
+    }
+  };
+
   return (
     <div>
       <h1>Lista de Contactos</h1>
@@ -48,9 +53,9 @@ const Contact = () => {
         {store.contacts.length === 0 ? (
           <p>No hay contactos disponibles.</p>
         ) : (
-          store.contacts.map((contact, index) => (
+          store.contacts.map((contact) => (
             <ContactCard
-              key={contact.id || contact.email || index}
+              key={contact.id}
               contact={contact}
               onDelete={handleDelete}
             />
