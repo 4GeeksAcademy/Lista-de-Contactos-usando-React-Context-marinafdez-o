@@ -1,10 +1,10 @@
-import { createContext } from "react";
-import useGlobalReducer from "./useGlobalReducer";
+import React, { createContext } from "react";
+import useGlobalReducer from "./hooks/useGlobalReducer";
 
-export const Context = createContext();
+export const Context = createContext(null);
 
-export const GlobalProvider = ({ children }) => {
-  const [store, dispatch] = useGlobalReducer();
+const GlobalProvider = ({ children }) => {
+  const { store, dispatch } = useGlobalReducer();
 
   return (
     <Context.Provider value={{ store, dispatch }}>
@@ -12,3 +12,5 @@ export const GlobalProvider = ({ children }) => {
     </Context.Provider>
   );
 };
+
+export default GlobalProvider;
